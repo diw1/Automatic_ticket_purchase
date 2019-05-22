@@ -21,12 +21,13 @@ damai_url="https://www.damai.cn/"
 #登录页
 login_url="https://passport.damai.cn/login?ru=https%3A%2F%2Fwww.damai.cn%2F"
 #抢票目标页
-# target_url="https://detail.damai.cn/item.htm?spm=a2oeg.search_category.0.0.71254d153q9EDX&id=590449968855&clicktitle=%E7%9B%B4%E5%88%B0%E4%B8%96%E7%95%8C%E5%B0%BD%E5%A4%B4-8090%E7%BB%8F%E5%85%B8%E5%8A%A8%E6%BC%AB%E6%BC%94%E5%94%B1%E4%BC%9A%E4%B8%8A%E6%B5%B7%E7%AB%99"
+# target_url="https://detail.damai.cn/item.htm?spm=a2oeg.search_category.0.0.41604d150fzHFD&id=593516280422&clicktitle=2019MDSK%E9%9F%B3%E4%B9%90%E8%8A%82%E6%AD%A6%E6%B1%89%E7%AB%99"
 #选座类型页面
-target_url="https://detail.damai.cn/item.htm?spm=a2oeg.search_category.0.0.12184d158syK1V&id=594491989335&clicktitle=2019%E5%92%AA%E5%92%95%E9%9F%B3%E4%B9%90%E7%8E%B0%E5%9C%BA%E4%B8%81%E5%BD%93%E2%80%9C%E7%88%B1%E5%88%B0%E4%B8%8D%E8%A6%81%E5%91%BD%E2%80%9D%E5%B7%A1%E5%9B%9E%E6%BC%94%E5%94%B1%E4%BC%9A%20%E4%B8%8A%E6%B5%B7%E7%AB%99"
+target_url="https://detail.damai.cn/item.htm?spm=a2oeg.search_category.0.0.51ce6bffe7kiLU&id=593089517773&clicktitle=2019%20DOTA2%20%E5%9B%BD%E9%99%85%E9%82%80%E8%AF%B7%E8%B5%9B"
 
-name = "Your_Name"
-phone = "Your_PhoneNumber"
+name = "name"
+phone = "13912345678"
+privilege_code = "********"
 
 class Concert(object):
     def __init__(self):
@@ -80,12 +81,17 @@ class Concert(object):
      
     def enter_concert(self):
         print('###打开浏览器，进入大麦网###') 
-        self.driver = webdriver.Chrome()        #默认Chrome浏览器
+        self.driver = webdriver.Chrome('./chromedriver')        #默认Chrome浏览器
         # self.driver.maximize_window()           #最大化窗口
         self.login()                            #先登录再说
         self.driver.refresh()                   #刷新页面
         self.status = 2                         #登录成功标识
         print("###登录成功###")
+
+    def add_code(self):
+        print('###添加特权码###')
+        self.driver.find_element_by_id('privilege_val').send_keys(privilege_code)
+        self.driver.find_element_by_xpath('//html//body//div[2]//div//div[1]//div[1]//div//div[2]//div[3]//div[3]//div[1]//button').click() #点击确定 特权码
 
     def choose_ticket(self):
         if self.status == 2:                  #登录成功入口
@@ -94,7 +100,7 @@ class Concert(object):
             print("="*30)
             print("###开始进行日期及票价选择###")
             while self.driver.title.find('确认订单') == -1:           #如果跳转到了订单结算界面就算这步成功了，否则继续执行此步
-                
+                self.add_code() # 添加特权码
                 # self.driver.find_elements_by_xpath('//html//body//div[@class = "perform__order__price"]//div[2]//div//div//a[2]')[0].click()   #购票数+1(若需要)
                 # self.driver.find_elements_by_xpath('//div[@class = "perform__order__select perform__order__select__performs"]//div[2]//div//div[x]')[0].click()   #默认购票日期的选择,x为日期的选择，1，2，3....
                 cart = self.driver.find_element_by_class_name('perform')   #获得选票界面的表单值
