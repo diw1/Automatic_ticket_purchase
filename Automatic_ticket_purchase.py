@@ -101,7 +101,11 @@ class Concert(object):
             print("###开始进行日期及票价选择###")
             while self.driver.title.find('确认订单') == -1:           #如果跳转到了订单结算界面就算这步成功了，否则继续执行此步
                 self.add_code() # 添加特权码
-                # self.driver.find_elements_by_xpath('//html//body//div[@class = "perform__order__price"]//div[2]//div//div//a[2]')[0].click()   #购票数+1(若需要)
+                try:
+                    self.driver.find_element_by_class_name('cafe-c-input-number-handle-up').click()  # 购票数加1
+                except e:
+                    continue
+
                 # self.driver.find_elements_by_xpath('//div[@class = "perform__order__select perform__order__select__performs"]//div[2]//div//div[x]')[0].click()   #默认购票日期的选择,x为日期的选择，1，2，3....
                 cart = self.driver.find_element_by_class_name('perform')   #获得选票界面的表单值
 
