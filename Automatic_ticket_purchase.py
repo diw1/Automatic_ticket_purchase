@@ -25,9 +25,9 @@ login_url="https://passport.damai.cn/login?ru=https%3A%2F%2Fwww.damai.cn%2F"
 #选座类型页面
 target_url="https://detail.damai.cn/item.htm?spm=a2oeg.search_category.0.0.51ce6bffe7kiLU&id=593089517773&clicktitle=2019%20DOTA2%20%E5%9B%BD%E9%99%85%E9%82%80%E8%AF%B7%E8%B5%9B"
 
-name = "name"
-phone = "13912345678"
-privilege_code = "********"
+name = "123"
+phone = "123"
+privilege_code = "123"
 
 class Concert(object):
     def __init__(self):
@@ -102,11 +102,13 @@ class Concert(object):
             while self.driver.title.find('确认订单') == -1:           #如果跳转到了订单结算界面就算这步成功了，否则继续执行此步
                 self.add_code() # 添加特权码
                 try:
-                    self.driver.find_element_by_class_name('cafe-c-input-number-handle-up').click()  # 购票数加1
-                except e:
-                    continue
+                    self.driver.find_element_by_class_name('cafe-c-input-number-handle-up').click() #购票数加1
+                except Exception as e:
+                    pass
 
-                # self.driver.find_elements_by_xpath('//div[@class = "perform__order__select perform__order__select__performs"]//div[2]//div//div[x]')[0].click()   #默认购票日期的选择,x为日期的选择，1，2，3....
+                # self.driver.find_elements_by_xpath('//html//body//div[@class = "perform__order__price"]//div[2]//div//div//a[2]')[0].click()   #购票数+1(若需要)
+                self.driver.find_elements_by_xpath('//div[@class = "perform__order__select perform__order__select__'
+                                                   'performs"]//div[2]//div//div[3]')[0].click()   #默认购票日期的选择,x为日期的选择，1，2，3....
                 cart = self.driver.find_element_by_class_name('perform')   #获得选票界面的表单值
 
                 # try:各种按钮的点击,
@@ -205,4 +207,4 @@ if __name__ == '__main__':
 
     except Exception as e:
         print(e)
-        con.finish()
+        #con.finish()
